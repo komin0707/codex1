@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.SystemClock;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -24,7 +25,11 @@ public class UnlockAccessibilityService extends AccessibilityService {
             }
         };
         IntentFilter filter = new IntentFilter(Intent.ACTION_USER_PRESENT);
-        registerReceiver(receiver, filter);
+        if (Build.VERSION.SDK_INT >= 33) {
+            registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(receiver, filter);
+        }
     }
 
     private void launchList() {
